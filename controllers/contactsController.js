@@ -5,9 +5,13 @@ module.exports = {
   findAll: function(req, res) {
     db.User.findOne({_id: req.session.userId})
       .populate('contacts')
-      .sort({date: -1})
+      // .sort({name_last: 1})
       .then(dbModel => {
-        res.json(dbModel.contacts);
+        var thing = dbModel.contacts.sort((a,b) => {
+					console.log(a);
+					return a.name_last.localeCompare(b.name_last);
+				});
+        res.json(thing);
       })
       .catch(err => res.status(422).json(err));
   },
